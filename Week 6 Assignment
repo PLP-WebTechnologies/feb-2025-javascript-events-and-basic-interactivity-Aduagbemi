@@ -1,0 +1,168 @@
+Index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Assignment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <button id="colorChangeBtn">Click me to change color</button>
+    <img id="imageGallery" src="image1.jpg" alt="Gallery Image">
+    <div class="tabs">
+      <button class="tab-btn" data-tab="1">Tab 1</button>
+      <button class="tab-btn" data-tab="2">Tab 2</button>
+      <div id="tabContent1" class="tab-content">Content for Tab 1</div>
+      <div id="tabContent2" class="tab-content">Content for Tab 2</div>
+    </div>
+
+    <form id="userForm">
+      <input type="text" id="name" placeholder="Your name" required>
+      <input type="email" id="email" placeholder="Your email" required>
+      <input type="password" id="password" placeholder="Your password" required>
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="message"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+Style.Css
+/* Add some basic styling */
+body {
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  padding-top: 50px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.tab-btn {
+  margin: 5px;
+  padding: 10px;
+  background-color: #ddd;
+}
+
+.tab-content {
+  display: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+input {
+  padding: 8px;
+  margin: 10px;
+  width: 100%;
+}
+
+input:focus {
+  border-color: #4CAF50;
+}
+
+Script.js
+// Event Handling - Button Click
+document.getElementById("colorChangeBtn").addEventListener("click", function() {
+  this.style.backgroundColor = "blue";
+  this.textContent = "You clicked me!";
+});
+
+// Hover Effects
+document.getElementById("colorChangeBtn").addEventListener("mouseover", function() {
+  this.style.backgroundColor = "orange";
+});
+document.getElementById("colorChangeBtn").addEventListener("mouseout", function() {
+  this.style.backgroundColor = "#4CAF50";
+});
+
+// Keypress Detection
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    alert("Enter key pressed!");
+  }
+});
+
+// Bonus: Double-click or Long press
+let pressTimer;
+document.getElementById("colorChangeBtn").addEventListener("dblclick", function() {
+  alert("Double-click detected!");
+});
+document.getElementById("colorChangeBtn").addEventListener("mousedown", function() {
+  pressTimer = setTimeout(function() {
+    alert("Long press detected!");
+  }, 1000); // 1-second long press
+});
+document.getElementById("colorChangeBtn").addEventListener("mouseup", function() {
+  clearTimeout(pressTimer);
+});
+
+// Image Gallery
+let images = ["image1.jpg", "image2.jpg", "image3.jpg"];
+let currentIndex = 0;
+document.getElementById("imageGallery").addEventListener("click", function() {
+  currentIndex = (currentIndex + 1) % images.length;
+  this.src = images[currentIndex];
+});
+
+// Tabs/Accordion Content
+document.querySelectorAll(".tab-btn").forEach(button => {
+  button.addEventListener("click", function() {
+    const tabId = this.getAttribute("data-tab");
+    document.querySelectorAll(".tab-content").forEach(content => {
+      content.style.display = "none";
+    });
+    document.getElementById("tabContent" + tabId).style.display = "block";
+  });
+});
+
+// Form Validation
+document.getElementById("userForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  let valid = true;
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  // Required field checks
+  if (!name || !email || !password) {
+    valid = false;
+    alert("All fields are required!");
+  }
+
+  // Email format validation
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  if (!email.match(emailRegex)) {
+    valid = false;
+    alert("Please enter a valid email.");
+  }
+
+  // Password rule check (min 8 characters)
+  if (password.length < 8) {
+    valid = false;
+    alert("Password must be at least 8 characters.");
+  }
+
+  // Success message
+  if (valid) {
+    document.getElementById("message").textContent = "Form submitted successfully!";
+  }
+});
